@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema({
@@ -10,6 +11,8 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    maxLength: 40,
+    minLength: 1,
   },
 });
 

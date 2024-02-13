@@ -4,6 +4,8 @@ if (apiUrl.endsWith('/')) {
   apiUrl = apiUrl.slice(0, -1);
 }
 
+console.log(`apiUrl = ${apiUrl}`);
+
 export default {
   apiUrl,
 };
