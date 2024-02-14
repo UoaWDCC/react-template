@@ -1,6 +1,10 @@
-import { UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+  UseQueryResult,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { continueAuth, getUser, upsertUser, verifyAuth } from '@utils/auth';
-import QueryKeys, { queryClient } from '@utils/queryKeys';
+import QueryKeys from '@utils/queryKeys';
 import { createContext } from 'react';
 import { useCookies } from 'react-cookie';
 
@@ -38,8 +42,25 @@ interface AuthContextProviderProps {
   children?: React.ReactNode;
 }
 
+/* 
+  This is used to compose two functions
+  so that whenever a change to auth like logging out
+  it will refetch the user data immediately after before returning
+*/
+const composeAsyncFunction = <T extends any[], U>(
+  f: (...args: T) => Promise<U>,
+  n: () => Promise<any>
+): ((...args: T) => Promise<U>) => {
+  return async (...args: T) => {
+    let res = await f(...args);
+    await n();
+    return res;
+  };
+};
+
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [cookies] = useCookies(['auth-token']);
+  const queryClient = useQueryClient();
   const userQuery = useQuery(
     {
       queryKey: [QueryKeys.GetUser, cookies['auth-token']],
@@ -49,9 +70,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   );
   let value: AuthContextValue = {
     user: userQuery,
-    continueAuth,
-    verifyAuth,
-    upsertUser,
+    continueAuth: continueAuth,
+    verifyAuth: composeAsyncFunction(verifyAuth, userQuery.refetch),
+    upsertUser: composeAsyncFunction(upsertUser, userQuery.refetch),
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

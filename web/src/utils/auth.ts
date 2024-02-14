@@ -7,7 +7,6 @@ const cookies = new Cookies(null, { path: '/' });
 
 export async function getUser(authToken: string): Promise<User | null> {
   if (!authToken) return null;
-  console.log(`authToken = ${authToken}`);
 
   const res = await axios({
     url: '/user',

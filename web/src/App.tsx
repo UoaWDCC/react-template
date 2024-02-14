@@ -3,9 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home';
 import { AuthContextProvider } from './contexts/Auth';
 import Login from '@pages/Login';
-
-// Create a client
-const queryClient = new QueryClient();
+import { useState } from 'react';
 
 const router = createBrowserRouter([
   {
@@ -19,11 +17,12 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
+  const [queryClient] = useState(() => new QueryClient());
   return (
-    <AuthContextProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
         <RouterProvider router={router} />
-      </QueryClientProvider>
-    </AuthContextProvider>
+      </AuthContextProvider>
+    </QueryClientProvider>
   );
 }

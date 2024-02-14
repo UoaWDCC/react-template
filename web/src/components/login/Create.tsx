@@ -1,9 +1,16 @@
+import { AxiosError } from 'axios';
 import { useState } from 'react';
+import { z } from 'zod';
 
 export interface UserProfile {
   firstName: string;
   lastName?: string;
 }
+
+const createUserRequestSchema = z.object({
+  firstName: z.string().min(2).max(40),
+  lastName: z.string().min(2).max(40).optional(),
+});
 
 interface UserEntryProps {
   value: UserProfile;
@@ -34,18 +41,31 @@ export default function Create({ value, setValue, onSubmit }: UserEntryProps) {
   });
 
   const handleSubmit = async () => {
+    const result = createUserRequestSchema.safeParse(value);
+    if (!result.success) {
+      setFetchState({
+        isLoading: false,
+        isError: true,
+        error: result.error.issues[0].message,
+      });
+      return;
+    }
     try {
       setFetchState({
         isLoading: true,
         isError: false,
       });
+      // Sends axios request
+      // On error will propogate to this
       await onSubmit();
     } catch (err: any) {
-      const error: Error = err;
+      const error: AxiosError = err;
+      const errorResponse: string =
+        (error?.response?.data as string) || 'Failed to create profile';
       setFetchState({
         isLoading: false,
         isError: true,
-        error: 'Failed to send email. Please try again.',
+        error: errorResponse,
       });
     }
   };

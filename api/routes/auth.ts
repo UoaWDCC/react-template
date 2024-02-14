@@ -24,7 +24,7 @@ authRoutes.post('/continue', async (req: Request, res: Response) => {
   await deleteExpired();
 
   const createAuthCodeRequestSchema = z.object({
-    email: z.string().max(40).min(1),
+    email: z.string().email(),
   });
 
   const result = createAuthCodeRequestSchema.safeParse(req.body);
@@ -41,6 +41,7 @@ authRoutes.post('/continue', async (req: Request, res: Response) => {
         .padStart(6, '0'),
     });
     await newAuthCode.save();
+    console.log(`created auth code ${newAuthCode} for email ${email}`);
     await sendContinueEmail(newAuthCode.email, newAuthCode.code);
   } catch (err) {
     console.error(err);

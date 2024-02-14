@@ -30,13 +30,15 @@ export default function Login() {
 
   const submitCode = async () => {
     await authContext.verifyAuth(email, code);
-    const { refetch } = authContext.user;
-    await refetch();
     const { data } = authContext.user;
-    if (data) {
-      setStep('welcome');
-    } else {
+    if (data?.firstName == undefined) {
+      // If the user does not exists
+      // Let them create a profile
       setStep('create');
+    } else {
+      // If the user does exist
+      // Welcome them back
+      setStep('welcome');
     }
   };
 
@@ -86,7 +88,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-screen md:w-96 min-h-96 md:rounded-xl md:bg-base-200">
+    <div className="w-screen md:w-96 min-h-96 md:rounded-xl ">
       {stepMap[step]}
     </div>
   );
