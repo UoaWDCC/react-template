@@ -10,7 +10,10 @@ export default function Home() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: [QueryKeys.GetIntro, name],
     queryFn: async () => {
-      const { data } = await axios(`${urls.apiUrl}/hello/${name}`);
+      const { data } = await axios(`/hello/${name}`, {
+        method: 'get',
+        baseURL: urls.apiUrl,
+      });
       return data;
     },
   });
