@@ -9,8 +9,8 @@ import helloRoutes from './routes/hello';
 const app = express();
 config();
 
-const databaseUrl: string = process.env.DATABASE_URL!;
-connect(databaseUrl);
+// const databaseUrl: string = process.env.DATABASE_URL!;
+// connect(databaseUrl);
 
 app.use(json());
 app.use(cors());
