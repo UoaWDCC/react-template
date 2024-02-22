@@ -37,7 +37,7 @@ jobs:
       - id: 'app-engine-deploy'
         uses: 'google-github-actions/deploy-appengine@v2'
         with:
-          project_id: wdcc-[project_name]-dev
+          project_id: wdcc-react-template-dev
           working_directory: ./api
 
   deploy-frontend:

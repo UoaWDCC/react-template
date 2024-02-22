@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema({

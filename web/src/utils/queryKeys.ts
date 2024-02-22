@@ -1,5 +1,5 @@
 enum QueryKeys {
-  GetUser = 'get-user',
+  GetIntro = 'get-intro',
 }
 
 export default QueryKeys;

@@ -5,8 +5,6 @@ import { config } from 'dotenv';
 
 // Import Routers
 import helloRoutes from './routes/hello';
-import authRoutes from './routes/auth';
-import userRoutes from './routes/user';
 
 const app = express();
 config();
@@ -20,8 +18,6 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/hello', helloRoutes);
-app.use('/auth', authRoutes);
-app.use('/user', userRoutes);
 
 const port = Number.parseInt(process.env.PORT || '3000');
 app.listen(port, () => {

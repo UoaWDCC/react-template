@@ -7,12 +7,6 @@ import { z } from 'zod';
 
 const helloRoutes = Router();
 
-function sleep(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 helloRoutes.get('/:name', async (req: Request, res: Response) => {
   const Name = z.object({
     name: z.string(),
